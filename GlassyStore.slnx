@@ -3,5 +3,9 @@
     <File Path="IRepository.cs" />
     <File Path="Repository.cs" />
   </Folder>
+  <Folder Name="/Services/">
+    <File Path="IProductService.cs" />
+    <File Path="ProductService.cs" />
+  </Folder>
   <Project Path="GlassyStore.csproj" />
 </Solution>
