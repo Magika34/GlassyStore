@@ -1,4 +1,5 @@
 using GlassyStore.Data;
+using GlassyStore.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace GlassyStore
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

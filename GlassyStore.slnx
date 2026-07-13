@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Repositories/">
+    <File Path="IRepository.cs" />
+    <File Path="Repository.cs" />
+  </Folder>
   <Project Path="GlassyStore.csproj" />
 </Solution>
