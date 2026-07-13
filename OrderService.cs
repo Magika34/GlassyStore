@@ -21,10 +21,17 @@ namespace GlassyStore.Services
             var product = await _productRepository.GetByIdAsync(orderItem.ProductId);
             var lens = await _lensRepository.GetByIdAsync(orderItem.LensOptionId);
 
-            if (product == null || lens == null)
-                return 0;
+            if (product == null)
+                throw new Exception("Product not found.");
 
-            return product.Price + lens.PriceModifier;
+            if (lens == null)
+                throw new Exception("Lens option not found.");
+
+            decimal total = product.Price;
+
+            total += lens.PriceModifier;
+
+            return total;
         }
 
         public async Task<bool> IsInStockAsync(int productId)
