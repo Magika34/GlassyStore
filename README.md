@@ -62,12 +62,23 @@ Customer
 
 ---
 
-The application now seeds the default roles at startup and creates a local development administrator account.
+The application seeds the default roles at startup, but admin user creation is restricted to development or when explicitly enabled in configuration.
 
-- Admin email: admin@localhost
-- Admin password: Admin123!
+Seeding behavior
 
-Note: This admin account is created with EmailConfirmed=true to allow immediate login in local/dev environments. Change or remove this behavior for production.
+- By default seeding runs only when the app is running in the Development environment.
+- To enable seeding in other environments, set the configuration value Seed:Enable = true.
+
+Admin account
+
+- Default admin email: admin@localhost (used in Development if no Seed:AdminEmail is provided)
+- Default admin password in Development (for convenience): Admin123!
+- For non-development environments you MUST provide a password via configuration: Seed:AdminPassword
+
+Production guidance
+
+- Do NOT enable seeding in production unless you intend to create the account there. Use secrets or environment variables to supply Seed:AdminPassword when needed.
+- Remove or change the seeded admin credentials and disable Seed:Enable in production.
 
 The bundled EmailService is a debug stub that writes to the debug output. Replace with a real SMTP or third-party provider for sending real emails.
 
