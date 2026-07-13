@@ -62,6 +62,17 @@ Customer
 
 ---
 
+The application now seeds the default roles at startup and creates a local development administrator account.
+
+- Admin email: admin@localhost
+- Admin password: Admin123!
+
+Note: This admin account is created with EmailConfirmed=true to allow immediate login in local/dev environments. Change or remove this behavior for production.
+
+The bundled EmailService is a debug stub that writes to the debug output. Replace with a real SMTP or third-party provider for sending real emails.
+
+---
+
 ## Author
 
 Maggie

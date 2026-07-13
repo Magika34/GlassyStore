@@ -21,6 +21,7 @@ namespace GlassyStore
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -31,6 +32,14 @@ namespace GlassyStore
             builder.Services.AddScoped<IEmailService, EmailService>();
 
             var app = builder.Build();
+
+            // Seed default roles and an admin user
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                // Run seeding synchronously at startup for local/dev scenarios
+                Data.SeedData.InitializeAsync(services).GetAwaiter().GetResult();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
