@@ -9,5 +9,8 @@
     <File Path="OrderService.cs" />
     <File Path="ProductService.cs" />
   </Folder>
+  <Folder Name="/ViewModels/">
+    <File Path="CheckoutViewModel.cs" />
+  </Folder>
   <Project Path="GlassyStore.csproj" />
 </Solution>
