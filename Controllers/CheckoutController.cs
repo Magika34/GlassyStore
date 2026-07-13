@@ -2,6 +2,7 @@
 using GlassyStore.Models;
 using GlassyStore.Services;
 using GlassyStore.ViewModels;
+using GlassyStore.Services.Email;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -11,13 +12,16 @@ namespace GlassyStore.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IOrderService _orderService;
+        private readonly IEmailService _emailService;
 
         public CheckoutController(
-            ApplicationDbContext context,
-            IOrderService orderService)
+          ApplicationDbContext context,
+          IOrderService orderService,
+          IEmailService emailService)
         {
             _context = context;
             _orderService = orderService;
+            _emailService = emailService;
         }
         public IActionResult Index()
         {
@@ -68,6 +72,7 @@ namespace GlassyStore.Controllers
 
                 return View(model);
             }
+            // create order item and calculate total
 
             var orderItem = new OrderItem
             {
@@ -100,6 +105,25 @@ namespace GlassyStore.Controllers
             _context.OrderItems.Add(orderItem);
 
             await _context.SaveChangesAsync();
+
+            // send confirmation email after order is created
+            await _emailService.SendEmail(
+              User.Identity!.Name!,
+              "Order Confirmation",
+              $"""
+
+              Thank you for shopping with GlassyStore!
+
+              Order Number: {order.OrderId}
+
+              Total Amount: {order.TotalAmount:C}
+
+              Status: {order.Status}
+
+              Your order has been received successfully.
+
+              """
+            );
 
             await _orderService.ReduceStockAsync(model.ProductId);
 

@@ -12,6 +12,10 @@
     <File Path="OrderService.cs" />
     <File Path="ProductService.cs" />
   </Folder>
+  <Folder Name="/Services/Email/">
+    <File Path="EmailService.cs" />
+    <File Path="IEmailService.cs" />
+  </Folder>
   <Folder Name="/ViewModels/">
     <File Path="CheckoutViewModel.cs" />
     <File Path="ProductViewModel.cs" />

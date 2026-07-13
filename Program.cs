@@ -2,6 +2,7 @@ using GlassyStore.Data;
 using GlassyStore.Repositories;
 using GlassyStore.Services;
 using GlassyStore.Mapping;
+using GlassyStore.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,7 @@ namespace GlassyStore
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             var app = builder.Build();
 
