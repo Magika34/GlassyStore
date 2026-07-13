@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using GlassyStore.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GlassyStore.Data
@@ -9,5 +10,13 @@ namespace GlassyStore.Data
             : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<LensOption> LensOptions { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
