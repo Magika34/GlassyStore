@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Authorize(Roles = "Administrator")]
+
 public class LensOptionsController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -42,6 +42,7 @@ public class LensOptionsController : Controller
     }
 
     // GET: LENSOPTIONS/Create
+    [Authorize(Roles = "Administrator")]
     public IActionResult Create()
     {
         return View();
@@ -50,6 +51,7 @@ public class LensOptionsController : Controller
     // POST: LENSOPTIONS/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = "Administrator")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("LensOptionId,Type,Material,Coating,PriceModifier,OrderItems")] LensOption lensoption)
@@ -64,6 +66,7 @@ public class LensOptionsController : Controller
     }
 
     // GET: LENSOPTIONS/Edit/5
+    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> Edit(int? lensoptionid)
     {
         if (lensoptionid == null)
@@ -82,6 +85,7 @@ public class LensOptionsController : Controller
     // POST: LENSOPTIONS/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [Authorize(Roles = "Administrator")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? lensoptionid, [Bind("LensOptionId,Type,Material,Coating,PriceModifier,OrderItems")] LensOption lensoption)
@@ -115,6 +119,7 @@ public class LensOptionsController : Controller
     }
 
     // GET: LENSOPTIONS/Delete/5
+    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> Delete(int? lensoptionid)
     {
         if (lensoptionid == null)
@@ -133,6 +138,7 @@ public class LensOptionsController : Controller
     }
 
     // POST: LENSOPTIONS/Delete/5
+    [Authorize(Roles = "Administrator")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? lensoptionid)

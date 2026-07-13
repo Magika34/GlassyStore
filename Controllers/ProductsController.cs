@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GlassyStore.Controllers
 {
-    [Authorize(Roles = "Administrator")]
     public class ProductsController : Controller
     {
         private readonly IProductService _service;
@@ -41,7 +40,8 @@ namespace GlassyStore.Controllers
         }
 
         // GET: PRODUCTS/Create
-       
+        [Authorize(Roles = "Administrator")]
+
         public IActionResult Create()
         {
             return View();
@@ -50,6 +50,7 @@ namespace GlassyStore.Controllers
         // POST: PRODUCTS/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl")] Product product)
@@ -63,6 +64,7 @@ namespace GlassyStore.Controllers
         }
 
         // GET: PRODUCTS/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? productid)
         {
             if (productid == null)
@@ -81,6 +83,7 @@ namespace GlassyStore.Controllers
         // POST: PRODUCTS/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? productid, [Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl")] Product product)
@@ -113,6 +116,7 @@ namespace GlassyStore.Controllers
         }
 
         // GET: PRODUCTS/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? productid)
         {
             if (productid == null)
@@ -130,6 +134,7 @@ namespace GlassyStore.Controllers
         }
 
         // POST: PRODUCTS/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? productid)

@@ -75,6 +75,22 @@ namespace GlassyStore.Pages.Admin
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null) return NotFound();
 
+            // Prevent removing the last administrator
+            var admins = await _userManager.GetUsersInRoleAsync("Administrator");
+            var currentUserId = _userManager.GetUserId(User);
+            if (admins.Count <= 1 && admins.Any(a => a.Id == user.Id))
+            {
+                StatusMessage = "Cannot remove the last Administrator.";
+                return RedirectToPage();
+            }
+
+            // Prevent self-demotion
+            if (user.Id == currentUserId)
+            {
+                StatusMessage = "You cannot remove your own Administrator role.";
+                return RedirectToPage();
+            }
+
             if (await _userManager.IsInRoleAsync(user, "Administrator"))
             {
                 await _userManager.RemoveFromRoleAsync(user, "Administrator");
