@@ -1,0 +1,48 @@
+@page "/Admin/UserRoles"
+@using Microsoft.AspNetCore.Identity
+@model GlassyStore.Pages.Admin.UserRolesModel
+@{
+    ViewData["Title"] = "User Roles";
+}
+
+<h1>User Roles</h1>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success">@Model.StatusMessage</div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Administrator</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var u in Model.Users)
+    {
+        <tr>
+            <td>@u.Email</td>
+            <td>@(u.IsAdmin ? "Yes" : "No")</td>
+            <td>
+                @if (!u.IsAdmin)
+                {
+                    <form method="post" asp-page-handler="AddRole" style="display:inline">
+                        <input type="hidden" name="userId" value="@u.Id" />
+                        <button type="submit" class="btn btn-sm btn-primary">Promote to Admin</button>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-page-handler="RemoveRole" style="display:inline">
+                        <input type="hidden" name="userId" value="@u.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Remove Admin</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
