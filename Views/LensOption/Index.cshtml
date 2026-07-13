@@ -1,0 +1,59 @@
+@model IEnumerable<GlassyStore.Models.LensOption>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Material)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceModifier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderItems)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Material)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Coating)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PriceModifier)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.OrderItems)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LensOptionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LensOptionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LensOptionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

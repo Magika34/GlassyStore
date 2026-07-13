@@ -1,0 +1,84 @@
+@model GlassyStore.Models.OrderItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>OrderItem</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OrderItemId" />
+            <div class="form-group">
+                <label asp-for="OrderId" class="control-label"></label>
+                <input asp-for="OrderId" class="form-control" />
+                <span asp-validation-for="OrderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order" class="control-label"></label>
+                <input asp-for="Order" class="form-control" />
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <input asp-for="ProductId" class="form-control" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Product" class="control-label"></label>
+                <input asp-for="Product" class="form-control" />
+                <span asp-validation-for="Product" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LensOptionId" class="control-label"></label>
+                <input asp-for="LensOptionId" class="form-control" />
+                <span asp-validation-for="LensOptionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LensOption" class="control-label"></label>
+                <input asp-for="LensOption" class="form-control" />
+                <span asp-validation-for="LensOption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrescriptionSphereLeft" class="control-label"></label>
+                <input asp-for="PrescriptionSphereLeft" class="form-control" />
+                <span asp-validation-for="PrescriptionSphereLeft" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrescriptionSphereRight" class="control-label"></label>
+                <input asp-for="PrescriptionSphereRight" class="form-control" />
+                <span asp-validation-for="PrescriptionSphereRight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrescriptionCylinderLeft" class="control-label"></label>
+                <input asp-for="PrescriptionCylinderLeft" class="form-control" />
+                <span asp-validation-for="PrescriptionCylinderLeft" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrescriptionCylinderRight" class="control-label"></label>
+                <input asp-for="PrescriptionCylinderRight" class="form-control" />
+                <span asp-validation-for="PrescriptionCylinderRight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PupillaryDistance" class="control-label"></label>
+                <input asp-for="PupillaryDistance" class="form-control" />
+                <span asp-validation-for="PupillaryDistance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
