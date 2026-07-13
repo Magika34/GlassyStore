@@ -48,7 +48,7 @@ namespace GlassyStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl,RowVersion,OrderItems")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace GlassyStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? productid, [Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl,RowVersion,OrderItems")] Product product)
+        public async Task<IActionResult> Edit(int? productid, [Bind("ProductId,Name,Brand,FrameType,Material,Price,StockQuantity,ImageUrl")] Product product)
         {
             if (productid != product.ProductId)
             {

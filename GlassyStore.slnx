@@ -11,6 +11,7 @@
   </Folder>
   <Folder Name="/ViewModels/">
     <File Path="CheckoutViewModel.cs" />
+    <File Path="ProductViewModel.cs" />
   </Folder>
   <Project Path="GlassyStore.csproj" />
 </Solution>
