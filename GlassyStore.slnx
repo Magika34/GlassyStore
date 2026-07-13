@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Mapping/">
+    <File Path="AutoMapperProfile.cs" />
+  </Folder>
   <Folder Name="/Repositories/">
     <File Path="IRepository.cs" />
     <File Path="Repository.cs" />
