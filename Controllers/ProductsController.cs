@@ -1,10 +1,11 @@
-
+using Microsoft.AspNetCore.Authorization;
 using GlassyStore.Models;
 using GlassyStore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GlassyStore.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class ProductsController : Controller
     {
         private readonly IProductService _service;
@@ -15,12 +16,14 @@ namespace GlassyStore.Controllers
         }
 
         // GET: PRODUCTS
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _service.GetProductsAsync());
         }
 
         // GET: PRODUCTS/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? productid)
         {
             if (productid == null)
@@ -38,6 +41,7 @@ namespace GlassyStore.Controllers
         }
 
         // GET: PRODUCTS/Create
+       
         public IActionResult Create()
         {
             return View();

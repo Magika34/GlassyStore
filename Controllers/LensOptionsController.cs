@@ -1,9 +1,11 @@
 
+using GlassyStore.Data;
+using GlassyStore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GlassyStore.Models;
-using GlassyStore.Data;
 
+[Authorize(Roles = "Administrator")]
 public class LensOptionsController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -14,12 +16,14 @@ public class LensOptionsController : Controller
     }
 
     // GET: LENSOPTIONS
+    [AllowAnonymous]
     public async Task<IActionResult> Index()    
     {
         return View(await _context.LensOptions.ToListAsync());
     }
 
     // GET: LENSOPTIONS/Details/5
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int? lensoptionid)
     {
         if (lensoptionid == null)
