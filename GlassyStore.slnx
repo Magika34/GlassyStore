@@ -4,7 +4,9 @@
     <File Path="Repository.cs" />
   </Folder>
   <Folder Name="/Services/">
+    <File Path="IOrderService.cs" />
     <File Path="IProductService.cs" />
+    <File Path="OrderService.cs" />
     <File Path="ProductService.cs" />
   </Folder>
   <Project Path="GlassyStore.csproj" />
