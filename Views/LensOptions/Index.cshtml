@@ -6,9 +6,14 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Administrator"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-success">
+            Add LensOption
+        </a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -49,9 +54,26 @@
                 @Html.DisplayFor(model => item.OrderItems)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.LensOptionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LensOptionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LensOptionId">Delete</a>
+                    <a asp-action="Details"
+                       asp-route-productid="@item.LensOptionId"
+                       class="btn btn-info btn-sm">
+                        Details
+                    </a>
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-productid="@item.LensOptionId"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-productid="@item.LensOptionId"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                    }
             </td>
         </tr>
 }
