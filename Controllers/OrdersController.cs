@@ -5,27 +5,50 @@ using GlassyStore.Models;
 using GlassyStore.Data;
 using GlassyStore.Services.Email;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GlassyStore.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailService _emailService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public OrdersController(ApplicationDbContext context, IEmailService emailService)
+        public OrdersController(ApplicationDbContext context, IEmailService emailService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _emailService = emailService;
+            _userManager = userManager;
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyOrders()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var orders = await _context.Orders
+                .Where(o => o.CustomerId == userId)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.LensOption)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            return View(orders);
         }
 
         // GET: ORDERS
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Orders.ToListAsync());
         }
 
         // GET: ORDERS/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? orderid)
         {
             if (orderid == null)
@@ -40,9 +63,17 @@ namespace GlassyStore.Controllers
                 return NotFound();
             }
 
-            return View(order);
+            // allow admin or the order owner to view details
+            var userId = _userManager.GetUserId(User);
+            if (User.IsInRole("Administrator") || order.CustomerId == userId)
+            {
+                return View(order);
+            }
+
+            return Forbid();
         }
         // GET: ORDERS/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +84,7 @@ namespace GlassyStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("OrderId,CustomerId,OrderDate,TotalAmount,Status,RowVersion,OrderItems")] Order order)
         {
             if (ModelState.IsValid)
@@ -65,6 +97,7 @@ namespace GlassyStore.Controllers
         }
 
         // GET: ORDERS/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? orderid)
         {
             if (orderid == null)
@@ -85,6 +118,7 @@ namespace GlassyStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? orderid, [Bind("OrderId,CustomerId,OrderDate,TotalAmount,Status,RowVersion,OrderItems")] Order order)
         {
             if (orderid != order.OrderId)
@@ -116,6 +150,7 @@ namespace GlassyStore.Controllers
         }
 
         // GET: ORDERS/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? orderid)
         {
             if (orderid == null)
@@ -136,6 +171,7 @@ namespace GlassyStore.Controllers
         // POST: ORDERS/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int? orderid)
         {
             var order = await _context.Orders.FindAsync(orderid);

@@ -1,0 +1,41 @@
+@model GlassyStore.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="text-center mt-5">
+
+    <h1 class="text-success">✓ Order Placed Successfully!</h1>
+
+    <p class="lead">
+        Thank you for shopping with <strong>GlassyStore</strong>.
+    </p>
+
+    <hr />
+
+    <h4>Order Information</h4>
+
+    <p><strong>Order Number:</strong> #@Model.OrderId</p>
+
+    <p><strong>Date:</strong> @Model.OrderDate</p>
+
+    <p><strong>Total:</strong> @Model.TotalAmount.ToString("C")</p>
+
+    <p><strong>Status:</strong> @Model.Status</p>
+
+    <br />
+
+    <a asp-controller="Orders"
+       asp-action="MyOrders"
+       class="btn btn-primary">
+        View My Orders
+    </a>
+
+    <a asp-controller="Products"
+       asp-action="Index"
+       class="btn btn-outline-secondary">
+        Continue Shopping
+    </a>
+
+</div>

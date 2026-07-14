@@ -1,0 +1,105 @@
+@model IEnumerable<GlassyStore.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2 class="mb-4">My Orders</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You haven't placed any orders yet.
+    </div>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        <div class="card mb-4">
+
+            <div class="card-header">
+
+                <strong>Order #@order.OrderId</strong>
+
+                <div class="float-end" style="width:200px;">
+                    @if(order.Status == "Pending")
+                    {
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" style="width:25%">Pending</div>
+                        </div>
+                    }
+                    else if(order.Status == "In Lab")
+                    {
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width:50%">In Lab</div>
+                        </div>
+                    }
+                    else if(order.Status == "Shipped")
+                    {
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" style="width:75%">Shipped</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width:100%">Delivered</div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <p>
+                    <strong>Date:</strong>
+                    @order.OrderDate
+                </p>
+
+                <p>
+                    <strong>Total:</strong>
+                    @order.TotalAmount.ToString("C")
+                </p>
+
+                <hr />
+
+                @foreach (var item in order.OrderItems)
+                {
+                    <div class="row mb-3">
+
+                        <div class="col-md-8">
+
+                            <h5>@item.Product?.Name</h5>
+
+                            <p>
+                                <strong>Brand:</strong>
+                                @item.Product?.Brand
+                            </p>
+
+                            <p>
+                                <strong>Lens:</strong>
+                                @item.LensOption?.Type
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-4 text-end">
+
+                            <strong>
+
+                                @((item.Product?.Price ?? 0) + (item.LensOption?.PriceModifier ?? 0)).ToString("C")
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+}

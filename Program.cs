@@ -24,6 +24,7 @@ namespace GlassyStore
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IProductService, ProductService>();
@@ -39,6 +40,46 @@ namespace GlassyStore
                 var services = scope.ServiceProvider;
                 // Run seeding synchronously at startup for local/dev scenarios
                 Data.SeedData.InitializeAsync(services).GetAwaiter().GetResult();
+
+                // Ensure an administrator user exists so you can log in as admin@example.com
+                // This runs at startup in development; remove or guard for production use.
+                try
+                {
+                    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                    var adminRole = "Administrator";
+                    if (!roleManager.RoleExistsAsync(adminRole).GetAwaiter().GetResult())
+                    {
+                        roleManager.CreateAsync(new IdentityRole(adminRole)).GetAwaiter().GetResult();
+                    }
+
+                    var adminEmail = "admin@example.com";
+                    var adminPassword = "Admin123!";
+
+                    var admin = userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult();
+                    if (admin == null)
+                    {
+                        admin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+                        var createResult = userManager.CreateAsync(admin, adminPassword).GetAwaiter().GetResult();
+                        if (createResult.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(admin, adminRole).GetAwaiter().GetResult();
+                        }
+                        else
+                        {
+                            // If creation fails, write errors to console for debugging
+                            foreach (var e in createResult.Errors)
+                            {
+                                Console.WriteLine($"Seed admin error: {e.Code} - {e.Description}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error ensuring admin user: {ex.Message}");
+                }
             }
 
             // Configure the HTTP request pipeline.
@@ -57,6 +98,8 @@ namespace GlassyStore
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

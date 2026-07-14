@@ -1,62 +1,115 @@
 ﻿@model GlassyStore.ViewModels.CheckoutViewModel
 
+@using System.Text.Json
+
 @{
     ViewData["Title"] = "Checkout";
 }
 
 <h2>Checkout</h2>
 
-<form asp-action="Index">
+<form asp-action="Index" method="post">
 
-    <div class="mb-3">
-        <label>Frame</label>
-        <select asp-for="ProductId"
-                asp-items="ViewBag.Products"
-                class="form-control">
-        </select>
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    @{
+        var prod = (GlassyStore.Models.Product)ViewBag.SelectedProduct;
+    }
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="@(string.IsNullOrEmpty(prod.ImageUrl) ? Url.Content("~/images/placeholder.png") : Url.Content($"~/images/{prod.ImageUrl}"))" class="img-fluid rounded-start" style="height:150px; object-fit:cover;" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">@prod.Name</h5>
+                    <p class="card-text"><strong>Brand:</strong> @prod.Brand</p>
+                    <p class="card-text"><strong>Frame:</strong> @prod.FrameType</p>
+                    <p class="card-text"><strong>Material:</strong> @prod.Material</p>
+                    <p class="card-text text-primary"><strong>Price:</strong> $@prod.Price</p>
+                    <input type="hidden" asp-for="ProductId" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="mb-3">
         <label>Lens Type</label>
         <select asp-for="LensOptionId"
                 asp-items="ViewBag.Lenses"
-                class="form-control">
+                class="form-control" id="LensOptionId">
         </select>
     </div>
 
-    <div class="mb-3">
-        <label>Sphere Left</label>
-        <input asp-for="PrescriptionSphereLeft" class="form-control" />
-    </div>
+    <div id="prescriptionFields">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Sphere Left</label>
+                <input asp-for="PrescriptionSphereLeft" class="form-control" />
+                <span asp-validation-for="PrescriptionSphereLeft" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Sphere Right</label>
+                <input asp-for="PrescriptionSphereRight" class="form-control" />
+                <span asp-validation-for="PrescriptionSphereRight" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="mb-3">
-        <label>Sphere Right</label>
-        <input asp-for="PrescriptionSphereRight" class="form-control" />
-    </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Cylinder Left</label>
+                <input asp-for="PrescriptionCylinderLeft" class="form-control" />
+                <span asp-validation-for="PrescriptionCylinderLeft" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label>Cylinder Right</label>
+                <input asp-for="PrescriptionCylinderRight" class="form-control" />
+                <span asp-validation-for="PrescriptionCylinderRight" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="mb-3">
-        <label>Cylinder Left</label>
-        <input asp-for="PrescriptionCylinderLeft" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Cylinder Right</label>
-        <input asp-for="PrescriptionCylinderRight" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Pupillary Distance</label>
-        <input asp-for="PupillaryDistance" class="form-control" />
+        <div class="mb-3">
+            <label>Pupillary Distance</label>
+            <input asp-for="PupillaryDistance" class="form-control" />
+            <span asp-validation-for="PupillaryDistance" class="text-danger"></span>
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">
         Place Order
     </button>
 
+    @Html.AntiForgeryToken()
 </form>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        (function(){
+            const lensTypes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize((object)ViewBag.LensOptionTypes));
+
+            function isNonPrescription(lensId) {
+                const found = lensTypes.find(x => x.LensOptionId == parseInt(lensId));
+                if (!found) return false;
+                return (found.Type || "").toLowerCase().includes('non');
+            }
+
+            const select = document.getElementById('LensOptionId');
+            const prescriptionSection = document.getElementById('prescriptionFields');
+
+            function update() {
+                if (isNonPrescription(select.value)) {
+                    prescriptionSection.style.display = 'none';
+                } else {
+                    prescriptionSection.style.display = 'block';
+                }
+            }
+
+            select.addEventListener('change', update);
+            update();
+        })();
+    </script>
 }

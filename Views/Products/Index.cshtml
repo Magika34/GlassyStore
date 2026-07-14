@@ -1,105 +1,102 @@
 @model IEnumerable<GlassyStore.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shop";
 }
 
-<h1>Index</h1>
+<h2 class="mb-4">Eyewear Shop</h2>
 
-@if (User.IsInRole("Administrator"))
+<form asp-action="Index" method="get" class="mb-4">
+
+    <div class="input-group">
+
+        <input
+            type="text"
+            name="searchString"
+            class="form-control"
+            placeholder="Search frames or brands..." />
+
+        <button class="btn btn-primary">
+
+            Search
+
+        </button>
+
+    </div>
+
+</form>
+
+<div class="row">
+
+@foreach(var item in Model)
 {
-    <p>
-        <a asp-action="Create" class="btn btn-success">
-            Add Product
-        </a>
-    </p>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FrameType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Material)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RowVersion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderItems)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.FrameType)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Material)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.StockQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.RowVersion)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.OrderItems)
-            </td>
-            <td>
-                    <a asp-action="Details"
-                       asp-route-productid="@item.ProductId"
-                       class="btn btn-info btn-sm">
-                        Details
-                    </a>
+    <div class="col-md-4 mb-4">
 
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <a asp-action="Edit"
-                           asp-route-productid="@item.ProductId"
-                           class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+        <div class="card h-100 shadow">
 
-                        <a asp-action="Delete"
-                           asp-route-productid="@item.ProductId"
-                           class="btn btn-danger btn-sm">
-                            Delete
-                        </a>
-                    }
-            </td>
-        </tr>
+            <img class="card-img-top"
+                 src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/300x200?text=No+Image" : Url.Content($"~/images/{item.ImageUrl}"))"
+                 style="height:250px; object-fit:cover;" />
+
+            <div class="card-body">
+
+                <h4>@item.Name</h4>
+
+                <p>
+                    <strong>Brand:</strong>
+                    @item.Brand
+                </p>
+
+                <p>
+                    <strong>Frame:</strong>
+                    @item.FrameType
+                </p>
+
+                <p>
+                    <strong>Material:</strong>
+                    @item.Material
+                </p>
+
+                <h5 class="text-primary">
+                    $@item.Price
+                </h5>
+
+                @if (item.StockQuantity > 5)
+                {
+                    <span class="badge bg-success">
+                        In Stock
+                    </span>
+                }
+                else if (item.StockQuantity > 0)
+                {
+                    <span class="badge bg-warning text-dark">
+                        Only @item.StockQuantity left
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">
+                        Out of Stock
+                    </span>
+                }
+
+            </div>
+
+            <div class="card-footer text-center">
+
+                <a asp-action="Details"
+                   asp-route-productid="@item.ProductId"
+                   class="btn btn-primary">
+
+                    View Details
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
 }
-    </tbody>
-</table>
+
+</div>

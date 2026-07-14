@@ -1,0 +1,29 @@
+@model GlassyStore.Models.Order
+
+<h2>Update Status</h2>
+
+<form method="post">
+
+n<input asp-for="OrderId" type="hidden" />
+
+<select asp-for="Status" class="form-select">
+
+<option>Pending</option>
+
+<option>In Lab</option>
+
+<option>Shipped</option>
+
+<option>Delivered</option>
+
+</select>
+
+<br />
+
+<button class="btn btn-success">
+
+Save
+
+</button>
+
+</form>

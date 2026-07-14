@@ -16,9 +16,19 @@ namespace GlassyStore.Controllers
 
         // GET: PRODUCTS
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _service.GetProductsAsync());
+            var products = await _service.GetProductsAsync();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                products = products.Where(p =>
+                    (!string.IsNullOrEmpty(p.Name) && p.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(p.Brand) && p.Brand.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                ).ToList();
+            }
+
+            return View(products);
         }
 
         // GET: PRODUCTS/Details/5
